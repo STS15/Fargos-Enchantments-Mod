@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="All rights reserved"
+[[mods]]
+modId="fargos"
+version="1.0.0"
+displayName="Fargos"
+logoFile="examplemod.png"
+authors="STS15"
+#displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
+
+description='''
+A sword mod by STS15
+'''
+
+[[dependencies.fargos]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+    
+[[dependencies.fargos]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"
+    
+[[dependencies.fargos]]
+    modId="curios"
+    mandatory=true
+    versionRange="[1.19.2-5.1.4.3]"
+
+[[mixins]]
+    refmap="fargos-refmap.json"
+    config="fargos.mixins.json"

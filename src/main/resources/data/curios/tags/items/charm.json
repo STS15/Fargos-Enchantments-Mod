@@ -1,0 +1,13 @@
+{
+	"replace": false,
+	"values": [
+		"fargos:amathyst_enchantment",
+		"fargos:copper_enchantment",
+		"fargos:diamond_enchantment",
+		"fargos:emerald_enchantment",
+		"fargos:gold_enchantment",
+		"fargos:iron_enchantment",
+		"fargos:lapis_enchantment",
+		"fargos:redstone_enchantment"
+	]
+}
