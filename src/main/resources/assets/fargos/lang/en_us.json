@@ -1,0 +1,15 @@
+{
+  "item.fargos.redstone_enchantment": "Redstone Enchantment",
+  "item.fargos.amathyst_enchantment": "Amethyst Enchantment",
+  "item.fargos.diamond_enchantment": "Diamond Enchantment",
+  "item.fargos.lapis_enchantment": "Lapis Enchantment",
+  "item.fargos.iron_enchantment": "Iron Enchantment",
+  "item.fargos.emerald_enchantment": "Emerald Enchantment",
+  "item.fargos.gold_enchantment": "Gold Enchantment",
+  "item.fargos.copper_enchantment": "Copper Enchantment",
+  
+  "effect.fargos.active_ability_cooldown": "Active Ability Cooldown",
+  
+  "key.category.fargos": "Fargos",
+  "key.activate_ability": "Activate Active Ability"
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+  "ACA",
+  "DBD",
+  "ACA"
+],
+  "key": {
+    "A": {
+      "item": "minecraft:diamond_block"
+    },
+    "B": {
+      "item": "minecraft:netherite_block"
+    },
+    "C": {
+      "item": "minecraft:nether_star"
+    },
+    "D": {
+      "item": "fargos:iron_enchantment"
+    }
+  },
+  "result": {
+    "item": "fargos:diamond_enchantment",
+    "count": 1
+  }
+}
