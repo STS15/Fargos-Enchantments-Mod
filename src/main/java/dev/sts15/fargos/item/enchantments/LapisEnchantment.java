@@ -49,8 +49,6 @@ public class LapisEnchantment extends Item implements ICurioItem {
 
     private static final long COOLDOWN_DURATION = 1 * 60 * 1000; // Example cooldown duration
     private final Random random = new Random();
-    private long lastAbilityActivationTime = 0;
-    private Map<Player, Boolean> lastEnchantmentTableInteraction = new HashMap<>();
 
     public LapisEnchantment() {
         super(new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1).defaultDurability(0));
@@ -59,14 +57,8 @@ public class LapisEnchantment extends Item implements ICurioItem {
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         Player player = (Player) slotContext.entity();
-        long currentTime = System.currentTimeMillis();
-
         if (!player.level.isClientSide()) {
-            if (currentTime - lastAbilityActivationTime <= COOLDOWN_DURATION) {
-                spawnActiveAbilityParticles(player);
-            }
             spawnStationaryLapisParticles(player);
-            // Implement the lapis enchantment logic here
         }
     }
 
@@ -91,32 +83,7 @@ public class LapisEnchantment extends Item implements ICurioItem {
         double offsetZ = random.nextGaussian() * 0.2;
         serverLevel.sendParticles(particleType, x + offsetX, y + offsetY, z + offsetZ, 1, 0, 0, 0, 0);
     }
-    
-    private void spawnActiveAbilityParticles(Player player) {
-        ServerLevel serverLevel = (ServerLevel) player.level;
-        // Particle spawning logic
-    }
 
- // Example method for applying experience boost
-    @SubscribeEvent
-    public void onLivingExperienceDrop(LivingExperienceDropEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            ItemStack curioItem = getLapisEnchantmentItem(player);
-            if (curioItem != null) {
-                int originalExp = event.getDroppedExperience();
-                int additionalExp = (int) Math.ceil(originalExp * 0.35); // 35% more experience
-                int newExp = originalExp + additionalExp;
-
-                event.setDroppedExperience(newExp);
-
-                // Logging the experience change
-                System.out.println("Original Experience: " + originalExp + ", Modified Experience: " + newExp);
-            }
-        }
-    }
-
-    
     public static ItemStack getLapisEnchantmentItem(Player player) {
         AtomicReference<ItemStack> lapisEnchantmentItem = new AtomicReference<>(ItemStack.EMPTY);
 
@@ -128,24 +95,8 @@ public class LapisEnchantment extends Item implements ICurioItem {
     
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        // Passive Ability Description
-        tooltip.add(Component.literal("Passive: Increases experience gained").withStyle(ChatFormatting.GRAY));
-
-        // Active Ability Description
         tooltip.add(Component.literal("Passive: Automatically fills and empties Enchantment Table with Lapis Lazuli").withStyle(ChatFormatting.GRAY));
 
-        // Cooldown Information (if applicable)
-        long currentTime = System.currentTimeMillis();
-        long cooldownRemaining = Math.max(0, (lastAbilityActivationTime + COOLDOWN_DURATION) - currentTime);
-        int secondsRemaining = (int) (cooldownRemaining / 1000);
-        if (secondsRemaining > 0) {
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
-        }
-
-        // Additional Information (if needed)
-        // Include any other details you think are necessary for the player to know.
     }
 
 

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "fargos:item/nether_star_enchantment"
+  }
+}

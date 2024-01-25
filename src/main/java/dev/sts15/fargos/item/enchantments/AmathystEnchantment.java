@@ -37,7 +37,7 @@ import java.util.Random;
 
 public class AmathystEnchantment extends Item implements ICurioItem {
 
-    private static final long COOLDOWN_DURATION = 1 * 60 * 1000; // 5 minutes in milliseconds
+    private static final long COOLDOWN_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
     private static final long BOOST_DURATION = 30 * 1000; // 30 seconds in milliseconds
     private static final long PARTICLE_EFFECT_DURATION = 2 * 1000; // 2 seconds in milliseconds
     private final Random random = new Random();
@@ -53,102 +53,8 @@ public class AmathystEnchantment extends Item implements ICurioItem {
         long currentTime = System.currentTimeMillis();
 
         if (!player.level.isClientSide()) {
-            if (currentTime - lastAbilityActivationTime <= PARTICLE_EFFECT_DURATION) {
-                spawnActiveAbilityParticles(player);
-            }
             spawnStationaryPurpleParticles(player);
-            checkAndRestoreEnchantments(player);
-            activateBoostAbility(player);
         }
-    }
-
-    private void activateBoostAbility(Player player) {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastAbilityActivationTime > COOLDOWN_DURATION) {
-        	player.addEffect(new MobEffectInstance(Fargos.COOLDOWN_EFFECT.get(), 5 * 60 * 20, 0, false, false, true));
-            boostAndSaveAllEnchantedItems(player);
-            player.getPersistentData().putLong("AmethystBoostExpiry", currentTime + BOOST_DURATION);
-            lastAbilityActivationTime = currentTime;
-        }
-    }
-
-    private void boostAndSaveAllEnchantedItems(Player player) {
-        Iterable<ItemStack> allItems = player.getAllSlots();
-        for (ItemStack itemStack : allItems) {
-            if (!itemStack.isEmpty() && itemStack.isEnchanted()) {
-            	upgradeItem(itemStack);
-                saveOriginalEnchantments(itemStack);
-                boostEnchantments(itemStack);
-            }
-        }
-    }
-
-    
-    private void saveOriginalEnchantments(ItemStack itemStack) {
-        if (itemStack.isEnchanted()) {
-            Map<Enchantment, Integer> originalEnchantments = EnchantmentHelper.getEnchantments(itemStack);
-            ListTag enchantmentList = new ListTag();
-            originalEnchantments.forEach((enchantment, level) -> {
-                CompoundTag enchantmentTag = new CompoundTag();
-                enchantmentTag.putString("id", String.valueOf(EnchantmentHelper.getEnchantmentId(enchantment)));
-                enchantmentTag.putInt("lvl", level);
-                enchantmentList.add(enchantmentTag);
-            });
-            CompoundTag itemTag = itemStack.getOrCreateTag();
-            itemTag.put("OriginalEnchantments", enchantmentList);
-        }
-    }
-
-    private void boostEnchantments(ItemStack itemStack) {
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
-        enchantments.replaceAll((enchantment, level) -> level + 1); // Increase each enchantment level by 1
-        EnchantmentHelper.setEnchantments(enchantments, itemStack);
-    }
-
-    // Call this method regularly, e.g., in curioTick, to check and restore original enchantments
-    public void checkAndRestoreEnchantments(Player player) {
-        long currentTime = System.currentTimeMillis();
-        long boostExpiryTime = player.getPersistentData().getLong("AmethystBoostExpiry");
-
-        if (currentTime > boostExpiryTime) {
-            restoreOriginalEnchantments(player);
-            player.getPersistentData().remove("AmethystBoostExpiry"); // Remove the tag after restoring enchantments
-        }
-    }
-
-
-    private void restoreOriginalEnchantments(Player player) {
-        Iterable<ItemStack> allItems = player.getAllSlots();
-        for (ItemStack itemStack : allItems) {
-            if (!itemStack.isEmpty() && itemStack.getTag() != null && itemStack.getTag().contains("OriginalEnchantments", 9)) {
-                restoreEnchantmentsFromTag(itemStack);
-                resetUpgrade(itemStack);
-            }
-        }
-    }
-    
-    private void restoreEnchantmentsFromTag(ItemStack itemStack) {
-        if (itemStack.getTag() != null && itemStack.getTag().contains("OriginalEnchantments", 9)) { // 9 is the tag type for List
-            ListTag originalEnchantmentsList = itemStack.getTag().getList("OriginalEnchantments", 10); // 10 is the tag type for Compound
-            Map<Enchantment, Integer> originalEnchantments = EnchantmentHelper.deserializeEnchantments(originalEnchantmentsList);
-            EnchantmentHelper.setEnchantments(originalEnchantments, itemStack);
-            itemStack.removeTagKey("OriginalEnchantments");
-        }
-    }
-
-
-    private void spawnActiveAbilityParticles(Player player) {
-        ServerLevel serverLevel = (ServerLevel) player.level;
-        // Particle spawning logic
-    }
-    
-    @Override
-    public boolean isRepairable(ItemStack stack) {
-        CompoundTag nbt = stack.getTag();
-        if (nbt != null && nbt.getBoolean("IsUpgraded")) {
-            return false; // Not repairable if it's upgraded
-        }
-        return super.isRepairable(stack); // Repairable otherwise
     }
 
     private void spawnStationaryPurpleParticles(Player player) {
@@ -176,34 +82,6 @@ public class AmathystEnchantment extends Item implements ICurioItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("Passive: Negates incoming projectile damage").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Active: Temporarily boosts enchantment levels for armor and equipped tool (5-minute cooldown)").withStyle(ChatFormatting.GRAY));
-        
-        CompoundTag nbt = stack.getTag();
-        if (nbt != null && nbt.getBoolean("IsUpgraded")) {
-            tooltip.add(Component.literal("Cannot be used in an anvil while upgraded").withStyle(ChatFormatting.RED));
-        }
+    }
 
-        long currentTime = System.currentTimeMillis();
-        long cooldownRemaining = Math.max(0, (lastAbilityActivationTime + COOLDOWN_DURATION) - currentTime);
-        int secondsRemaining = (int) (cooldownRemaining / 1000);
-        if (secondsRemaining > 0) {
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
-        }
-    }
-    public void resetUpgrade(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        nbt.putBoolean("IsUpgraded", false);
-        stack.setTag(nbt);
-        // Handle other logic for resetting the upgrade here
-    }
-    public void upgradeItem(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        nbt.putBoolean("IsUpgraded", true);
-        stack.setTag(nbt);
-        // Handle other upgrading logic here
-    }
-    
-    
 }

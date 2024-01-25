@@ -46,12 +46,8 @@ public class RedstoneEnchantment extends Item implements ICurioItem {
         long currentTime = System.currentTimeMillis();
 
         repairArmorOverTime(player, currentTime);
-        checkAndActivateBoostAbility(player, currentTime);
 
         if (!player.level.isClientSide()) {
-            if (currentTime - lastAbilityActivationTime <= PARTICLE_EFFECT_DURATION) {
-                spawnActiveAbilityParticles(player);
-            }
             spawnStationaryRedParticles(player);
         }
     }
@@ -64,34 +60,6 @@ public class RedstoneEnchantment extends Item implements ICurioItem {
         }
     }
 
-    private void checkAndActivateBoostAbility(Player player, long currentTime) {
-        if (isBoostAbilityActivated(player) && (currentTime - lastActivationTime > 60000)) {
-            activateBoostAbility(player);
-            lastActivationTime = currentTime;
-        }
-    }
-    
-    private void spawnActiveAbilityParticles(Player player) {
-        if (player.level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel) player.level;
-
-            double x = player.getX();
-            double y = player.getY() + 1; // Particle height slightly above the ground
-            double z = player.getZ();
-            
-            int numberOfParticles = 30; // Total number of particles in the burst
-
-            for (int i = 0; i < numberOfParticles; i++) {
-                double offsetX = random.nextGaussian() * 0.2;
-                double offsetY = random.nextGaussian() * 0.2;
-                double offsetZ = random.nextGaussian() * 0.2;
-
-                serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, x + offsetX, y + offsetY, z + offsetZ, 1, 0, 0, 0, 0);
-            }
-        }
-    }
-
-    
     private void spawnStationaryRedParticles(Player player) {
         if (player.isOnGround()) {
             ServerLevel serverLevel = (ServerLevel) player.level;
@@ -120,33 +88,8 @@ public class RedstoneEnchantment extends Item implements ICurioItem {
         }
     }
 
-    private boolean isBoostAbilityActivated(Player player) {
-        return player.getHealth() < player.getMaxHealth() * 0.5;
-    }
-
-    private void activateBoostAbility(Player player) {
-    	if (!player.hasEffect(Fargos.COOLDOWN_EFFECT.get())) {
-            // Apply the boost effects
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 1)); // 10 seconds speed boost
-            player.addEffect(new MobEffectInstance(MobEffects.JUMP, 200, 1)); // 10 seconds jump boost
-            player.playSound(SoundEvents.TOTEM_USE, 0.8F, 1.0F);
-
-            // Apply the custom cooldown effect for 1 minute
-            player.addEffect(new MobEffectInstance(Fargos.COOLDOWN_EFFECT.get(), 60 * 20, 0, false, false, true));
-        }
-    }
-
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("Passive: Repairs armor slowly over time").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Active: Boosts speed and jump when health is low (1-minute cooldown).").withStyle(ChatFormatting.GRAY));
-        long currentTime = System.currentTimeMillis();
-        long cooldownRemaining = Math.max(0, (lastActivationTime + 60000) - currentTime);
-        int secondsRemaining = (int) (cooldownRemaining / 1000);
-        if (secondsRemaining > 0) {
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
-        }
     }
 }

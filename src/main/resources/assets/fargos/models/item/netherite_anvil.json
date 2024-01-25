@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "fargos:block/netherite_anvil"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "fargos:item/netherite_anvil_2d"
+    },
+    "ground": {
+      "parent": "fargos:item/netherite_anvil_2d"
+    },
+    "fixed": {
+      "parent": "fargos:item/netherite_anvil_2d"
+    }
+  }
+}

@@ -13,6 +13,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
@@ -33,6 +34,14 @@ public class GoldEnchantment extends Item implements ICurioItem {
     public GoldEnchantment() {
         super(new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1).defaultDurability(0));
     }
+    
+    @Override
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+        super.onCraftedBy(stack, level, player);
+
+        CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putBoolean("minecraft:piglin_loved", true);
+    }
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
@@ -41,24 +50,15 @@ public class GoldEnchantment extends Item implements ICurioItem {
 
         if (!player.level.isClientSide()) {
             spawnGoldParticles(player);
-            if (currentTime - lastHeroActivation >= HERO_COOLDOWN) {
-                // Active ability: Hero of the Village effect for 30 seconds
-                player.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, HERO_DURATION, 0));
-                lastHeroActivation = currentTime;
-            }
+//            if (currentTime - lastHeroActivation >= HERO_COOLDOWN) {
+//                // Active ability: Hero of the Village effect for 30 seconds
+//                player.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, HERO_DURATION, 0));
+//                lastHeroActivation = currentTime;
+//            }
 
             // Passive ability: Gold Armor mimic for Piglins and stone dropping gold nuggets
             // Note: You'll need to implement the logic for Piglin interaction and stone drops separately.
         }
-    }
-    
-    public static ItemStack getGoldEnchantmentItem(Player player) {
-        AtomicReference<ItemStack> goldEnchantmentItem = new AtomicReference<>(ItemStack.EMPTY);
-
-        CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof GoldEnchantment, player)
-            .ifPresent(triple -> goldEnchantmentItem.set(triple.getRight()));
-
-        return goldEnchantmentItem.get();
     }
 
     private void spawnGoldParticles(Player player) {
@@ -83,15 +83,15 @@ public class GoldEnchantment extends Item implements ICurioItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("Passive: Piglin damage negated, stone may drop gold nuggets").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Active: Grants Hero of the Village effect for 30 seconds (5-minute cooldown)").withStyle(ChatFormatting.GRAY));
-        long currentTime = System.currentTimeMillis();
-        long cooldownRemaining = Math.max(0, (lastHeroActivation + HERO_COOLDOWN) - currentTime);
-        int secondsRemaining = (int) (cooldownRemaining / 1000);
-        if (secondsRemaining > 0) {
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
-        }
+        tooltip.add(Component.literal("Passive: Piglins ignore you, stone may drop gold nuggets").withStyle(ChatFormatting.GRAY));
+//        tooltip.add(Component.literal("Active: Grants Hero of the Village effect for 30 seconds (5-minute cooldown)").withStyle(ChatFormatting.GRAY));
+//        long currentTime = System.currentTimeMillis();
+//        long cooldownRemaining = Math.max(0, (lastHeroActivation + HERO_COOLDOWN) - currentTime);
+//        int secondsRemaining = (int) (cooldownRemaining / 1000);
+//        if (secondsRemaining > 0) {
+//            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
+//        } else {
+//            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
+//        }
     }
 }

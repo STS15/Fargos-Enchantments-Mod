@@ -80,7 +80,7 @@ public class CopperEnchantment extends Item implements ICurioItem {
             currentCharge = Math.min(currentCharge, STATIC_CHARGE_THRESHOLD);
             nbt.putInt("StaticChargeLevel", currentCharge);
             stack.setTag(nbt);
-            System.out.println("Increased charge to " + currentCharge);
+            //System.out.println("Increased charge to " + currentCharge);
         }
     }
 

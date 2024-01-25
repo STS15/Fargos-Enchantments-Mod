@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class DiamondEnchantment extends Item implements ICurioItem {
 
-    private static final long RESISTANCE_COOLDOWN = 2 * 60 * 1000; // 2 minutes in milliseconds
-    private static final int RESISTANCE_DURATION = 60 * 20; // 1 minute in game ticks
+    private static final long RESISTANCE_COOLDOWN = 2 * 60 * 1000;
+    private static final int RESISTANCE_DURATION = 60 * 20;
     private long lastResistanceActivation = 0;
     private final Random random = new Random();
 
@@ -42,32 +42,19 @@ public class DiamondEnchantment extends Item implements ICurioItem {
         if (!player.level.isClientSide()) {
             spawnDiamondParticles(player);
 
-            // Passive Ability: Armor and Armor Toughness
-            // This is a simplified representation. Actual implementation may vary.
-
-            // Active Ability: Resistance
-            if (currentTime - lastResistanceActivation >= RESISTANCE_COOLDOWN) {
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, RESISTANCE_DURATION, 1)); // Resistance 2 for 1 minute
-                lastResistanceActivation = currentTime;
-            }
+//            if (currentTime - lastResistanceActivation >= RESISTANCE_COOLDOWN) {
+//                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, RESISTANCE_DURATION, 1));
+//                lastResistanceActivation = currentTime;
+//            }
         }
-    }
-
-    public static ItemStack getDiamondEnchantmentItem(Player player) {
-        AtomicReference<ItemStack> diamondEnchantmentItem = new AtomicReference<>(ItemStack.EMPTY);
-
-        CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof DiamondEnchantment, player)
-            .ifPresent(triple -> diamondEnchantmentItem.set(triple.getRight()));
-
-        return diamondEnchantmentItem.get();
     }
 
     private void spawnDiamondParticles(Player player) {
         ServerLevel serverLevel = (ServerLevel) player.level;
-        ParticleOptions particleOptions = new DustParticleOptions(new Vector3f(0.0F, 1.0F, 1.0F), 1.0F); // Cyan-ish color for diamond
+        ParticleOptions particleOptions = new DustParticleOptions(new Vector3f(0.0F, 1.0F, 1.0F), 1.0F);
         double radius = 0.5;
         double offsetY = 0.8;
-        for (int i = 0; i < 1; i++) { // Increase particle count for better effect
+        for (int i = 0; i < 1; i++) {
             double angle = random.nextDouble() * 2 * Math.PI;
             double offsetX = radius * Math.cos(angle);
             double offsetZ = radius * Math.sin(angle);
@@ -84,15 +71,15 @@ public class DiamondEnchantment extends Item implements ICurioItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("Passive: Adds armor, armor toughness, and ignores 1/3rd of all damage").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Active: Adds resistance 2 for 1 minute (2-minute cooldown)").withStyle(ChatFormatting.GRAY));
-        long currentTime = System.currentTimeMillis();
-        long cooldownRemaining = Math.max(0, (lastResistanceActivation + 120000) - currentTime);
-        int secondsRemaining = (int) (cooldownRemaining / 1000);
-        if (secondsRemaining > 0) {
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
-        }
+        tooltip.add(Component.literal("Passive: Adds armor, armor toughness, and ignores 1/5th of all damage").withStyle(ChatFormatting.GRAY));
+//        tooltip.add(Component.literal("Active: Adds resistance 2 for 1 minute (2-minute cooldown)").withStyle(ChatFormatting.GRAY));
+//        long currentTime = System.currentTimeMillis();
+//        long cooldownRemaining = Math.max(0, (lastResistanceActivation + 120000) - currentTime);
+//        int secondsRemaining = (int) (cooldownRemaining / 1000);
+//        if (secondsRemaining > 0) {
+//            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
+//        } else {
+//            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
+//        }
     }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fargos:item/bundle_of_horseshoe_balloons"
+  }
+}

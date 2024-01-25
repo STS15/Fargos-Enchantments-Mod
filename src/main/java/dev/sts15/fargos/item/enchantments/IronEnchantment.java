@@ -42,11 +42,11 @@ public class IronEnchantment extends Item implements ICurioItem {
 
         if (!player.level.isClientSide()) {
         	spawnIronParticles(player);
-            if (currentTime - lastResistanceActivation >= RESISTANCE_COOLDOWN) {
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, RESISTANCE_DURATION, 0)); // Resistance effect for 30 seconds
-               
-                lastResistanceActivation = currentTime;
-            }
+//            if (currentTime - lastResistanceActivation >= RESISTANCE_COOLDOWN) {
+//                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, RESISTANCE_DURATION, 0)); // Resistance effect for 30 seconds
+//               
+//                lastResistanceActivation = currentTime;
+//            }
         }
     }
     
@@ -82,15 +82,15 @@ public class IronEnchantment extends Item implements ICurioItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("Passive: Provides additional armor").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Active: Provides resistance effect for 30 seconds (2-minute cooldown).").withStyle(ChatFormatting.GRAY));
-        long currentTime = System.currentTimeMillis();
-        long cooldownRemaining = Math.max(0, (lastResistanceActivation + 60000) - currentTime);
-        int secondsRemaining = (int) (cooldownRemaining / 1000);
-        if (secondsRemaining > 0) {
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
-        }
+//        tooltip.add(Component.literal("Active: Provides resistance effect for 30 seconds (2-minute cooldown).").withStyle(ChatFormatting.GRAY));
+//        long currentTime = System.currentTimeMillis();
+//        long cooldownRemaining = Math.max(0, (lastResistanceActivation + 60000) - currentTime);
+//        int secondsRemaining = (int) (cooldownRemaining / 1000);
+//        if (secondsRemaining > 0) {
+//            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining.").withStyle(ChatFormatting.RED));
+//        } else {
+//            tooltip.add(Component.literal("Ability ready to use.").withStyle(ChatFormatting.GREEN));
+//        }
     }
 }
 

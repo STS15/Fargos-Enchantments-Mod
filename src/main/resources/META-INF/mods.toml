@@ -3,14 +3,14 @@ loaderVersion="[43,)"
 license="All rights reserved"
 [[mods]]
 modId="fargos"
-version="1.0.0"
-displayName="Fargos"
-logoFile="examplemod.png"
-authors="STS15"
+version="1.7.0"
+displayName="Fargo's Mod"
+logoFile="icon.png"
+authors="STS15, ADRMLParangosky, and Sassidy"
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 
 description='''
-A sword mod by STS15
+Fargo's mod includes multiple unique enchantment curios and a couple interesting boss fights
 '''
 
 [[dependencies.fargos]]
@@ -30,7 +30,7 @@ A sword mod by STS15
 [[dependencies.fargos]]
     modId="curios"
     mandatory=true
-    versionRange="[1.19.2-5.1.4.3]"
+    versionRange="[1.19.2-5.1.4.3,)"
 
 [[mixins]]
     refmap="fargos-refmap.json"

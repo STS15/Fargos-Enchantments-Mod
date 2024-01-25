@@ -2,25 +2,22 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
   "ACA",
-  "DBD",
+  "CBC",
   "ACA"
 ],
   "key": {
     "A": {
-      "item": "minecraft:diamond_block"
+      "item": "minecraft:iron_block"
     },
     "B": {
-      "item": "minecraft:netherite_block"
+      "item": "minecraft:diamond"
     },
     "C": {
-      "item": "minecraft:nether_star"
-    },
-    "D": {
-      "item": "fargos:iron_enchantment"
+      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "fargos:diamond_enchantment",
+    "item": "fargos:iron_enchantment",
     "count": 1
   }
 }

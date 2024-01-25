@@ -125,19 +125,19 @@ public class EmeraldEnchantment extends Item implements ICurioItem {
         tooltip.add(Component.literal("Passive: Extra damage to Pillager/Illager").withStyle(ChatFormatting.GRAY));
 
         // Active Ability Description
-        tooltip.add(Component.literal("Active: Provides Bonemeal effect to nearby crops (15-second cooldown)").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.literal("Passive: Provides Bonemeal effect to nearby crops (15-second cooldown)").withStyle(ChatFormatting.GRAY));
         
-        // Cooldown Information
-        long currentTime = System.currentTimeMillis();
-        long timeSinceLastUse = currentTime - lastActiveAbilityTime;
-        long cooldownRemaining = Math.max(0, ACTIVE_ABILITY_COOLDOWN - timeSinceLastUse);
-        
-        if (cooldownRemaining > 0) {
-            int secondsRemaining = (int) (cooldownRemaining / 1000);
-            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining").withStyle(ChatFormatting.RED));
-        } else {
-            tooltip.add(Component.literal("Ability ready to use").withStyle(ChatFormatting.GREEN));
-        }
+//        // Cooldown Information
+//        long currentTime = System.currentTimeMillis();
+//        long timeSinceLastUse = currentTime - lastActiveAbilityTime;
+//        long cooldownRemaining = Math.max(0, ACTIVE_ABILITY_COOLDOWN - timeSinceLastUse);
+//        
+//        if (cooldownRemaining > 0) {
+//            int secondsRemaining = (int) (cooldownRemaining / 1000);
+//            tooltip.add(Component.literal("Cooldown: " + secondsRemaining + " seconds remaining").withStyle(ChatFormatting.RED));
+//        } else {
+//            tooltip.add(Component.literal("Ability ready to use").withStyle(ChatFormatting.GREEN));
+//        }
     }
 
 }
