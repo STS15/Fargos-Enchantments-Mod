@@ -1,5 +1,6 @@
 package dev.sts15.fargos.item.forces;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -68,7 +69,7 @@ public class ForceOfRejectors extends Item implements ICurioItem {
     }
 	
 	private void removeWitherEffect(Player player) {
-        if (player.hasEffect(MobEffects.WITHER) && FargosConfig.getConfigValue("wither_enchantment")) {
+        if (player.hasEffect(MobEffects.WITHER) && FargosConfig.getConfigValue((ServerPlayer) player,"wither_enchantment")) {
             player.removeEffect(MobEffects.WITHER);
         }
     }

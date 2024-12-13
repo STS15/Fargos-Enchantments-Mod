@@ -1,5 +1,6 @@
 package dev.sts15.fargos.item.souls;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -45,13 +46,13 @@ public class SoulOfSupersonic extends Item implements ICurioItem {
             CompoundTag playerData = player.getPersistentData();
 
             // Walking speed boost
-            if (FargosConfig.getConfigValue("soul_of_supersonic-walking")) {
+            if (FargosConfig.getConfigValue((ServerPlayer) player,"soul_of_supersonic-walking")) {
                 AttributeModifier modifier = new AttributeModifier(WALK_SPEED_MODIFIER_ID, "Supersonic walking speed boost", WALK_SPEED_BOOST, AttributeModifier.Operation.MULTIPLY_TOTAL);
                 player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(modifier);
             }
 
             // Flying speed boost
-            if (FargosConfig.getConfigValue("soul_of_supersonic-flying")) {
+            if (FargosConfig.getConfigValue(player,"soul_of_supersonic-flying")) {
                 player.getAbilities().setFlyingSpeed(player.getAbilities().getFlyingSpeed() * FLY_SPEED_BOOST);
                 playerData.putBoolean("SoulOfSupersonicFlyingSpeedBoost", true); // Set flag
             }

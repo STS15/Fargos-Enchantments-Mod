@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.monster.Phantom;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +23,7 @@ public abstract class MobMixin {
             Phantom phantom = (Phantom) (Object) this;
             if (phantom.getTarget() instanceof Player) {
                 Player targetPlayer = (Player) phantom.getTarget();
-                if (hasSpectralEnchantment(targetPlayer) || (hasForceOfExplorer(targetPlayer) && FargosConfig.getConfigValue("spectral_enchantment"))) {
+                if (hasSpectralEnchantment(targetPlayer) || (hasForceOfExplorer(targetPlayer) && FargosConfig.getConfigValue(targetPlayer,"spectral_enchantment"))) {
                     phantom.setTarget(null);
                 }
             }

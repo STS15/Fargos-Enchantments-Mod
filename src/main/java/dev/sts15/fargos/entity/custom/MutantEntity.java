@@ -152,10 +152,10 @@ public class MutantEntity extends Monster implements IAnimatable {
 
 	    // CircleSickleGoal: Adjust the priority as needed
 	    this.spawnedSickles = new ArrayList<>();
-	    this.goalSelector.addGoal(3, new CircleSickleGoal(this, 8.0, spawnedSickles));
+	    this.goalSelector.addGoal(2, new CircleSickleGoal(this, 8.0, spawnedSickles));
 
 	    // SummonLaserSwordGoal: Lower priority as it might not need to run as often
-	    this.goalSelector.addGoal(2, new SummonLaserSwordGoal(this, 0, 1, 0));
+	    this.goalSelector.addGoal(3, new SummonLaserSwordGoal(this, 0, 1, 0));
 	}
 
 

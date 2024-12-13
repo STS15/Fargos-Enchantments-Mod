@@ -1,0 +1,13 @@
+{
+  "type": "fargos:append_loot",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:creeper"
+      }
+    }
+  ],
+  "key": "fargos:entities/additional_creeper_loot"
+}

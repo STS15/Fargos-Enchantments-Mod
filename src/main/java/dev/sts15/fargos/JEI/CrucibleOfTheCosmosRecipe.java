@@ -1,4 +1,4 @@
-package dev.sts15.fargos.JEI;
+package dev.sts15.fargos.jei;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ArmorItem;

@@ -1,4 +1,4 @@
-package dev.sts15.fargos.JEI;
+package dev.sts15.fargos.jei;
 
 import java.util.ArrayList;
 import java.util.List;

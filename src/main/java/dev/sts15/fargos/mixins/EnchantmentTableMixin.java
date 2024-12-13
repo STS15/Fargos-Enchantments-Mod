@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +33,7 @@ public abstract class EnchantmentTableMixin {
     @Inject(method = "slotsChanged", at = @At("RETURN"), cancellable = true)
     private void modifyEnchantmentCosts(Container container, CallbackInfo ci) {
     	//System.out.println("Slot changed!");
-        if (this.currentEnchantmentMenuPlayer != null && (hasEnchantingEnchantment(this.currentEnchantmentMenuPlayer) || (hasForceOfMystic(this.currentEnchantmentMenuPlayer) && FargosConfig.getConfigValue("enchanting_enchantment")))) {
+        if (this.currentEnchantmentMenuPlayer != null && (hasEnchantingEnchantment(this.currentEnchantmentMenuPlayer) || (hasForceOfMystic(this.currentEnchantmentMenuPlayer) && FargosConfig.getConfigValue(this.currentEnchantmentMenuPlayer,"enchanting_enchantment")))) {
             for (int i = 0; i < this.costs.length; i++) {
                 this.costs[i] = Math.max(1, this.costs[i] - (this.costs[i] / 3));
                 //System.out.println("Modifying enchantment cost for slot: " + i);

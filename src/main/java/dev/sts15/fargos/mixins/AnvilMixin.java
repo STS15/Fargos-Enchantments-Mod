@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,7 +29,7 @@ public abstract class AnvilMixin extends ItemCombinerMenu {
 	@Inject(method = "createResult", at = @At("RETURN"), cancellable = true)
     private void onCalculateCost(CallbackInfo ci) {
         Player interactingPlayer = this.player;
-        if (interactingPlayer != null && hasEnchantingEnchantment(interactingPlayer) || (hasForceOfMystic(interactingPlayer)&& FargosConfig.getConfigValue("enchanting_enchantment"))) {
+        if (interactingPlayer != null && hasEnchantingEnchantment(interactingPlayer) || (hasForceOfMystic(interactingPlayer)&& FargosConfig.getConfigValue(player,"enchanting_enchantment"))) {
             int originalCost = this.cost.get();
             int modifiedCost = Math.max(1, originalCost-(originalCost / 3));
             this.cost.set(modifiedCost);

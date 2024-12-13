@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -29,7 +30,7 @@ public abstract class PiglinMixin {
 	    Optional<Player> optionalPlayer = brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER);
 	    if (optionalPlayer.isPresent()) {
 	        Player player = optionalPlayer.get();
-	        if (hasGoldEnchantment(player) || (hasForceOfOverworld(player) && FargosConfig.getConfigValue("gold_enchantment"))) {
+	        if (hasGoldEnchantment(player) || (hasForceOfOverworld(player) && FargosConfig.getConfigValue(player,"gold_enchantment"))) {
 	            cir.setReturnValue(Optional.empty());
 	        }
 	    }

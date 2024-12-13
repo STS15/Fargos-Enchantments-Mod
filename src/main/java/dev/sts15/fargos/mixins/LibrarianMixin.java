@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +33,7 @@ public abstract class LibrarianMixin {
 	@Inject(method = "giveExperiencePoints", at = @At("HEAD"), cancellable = true)
     private void modifyExperiencePoints(int p_36291_, CallbackInfo ci) {
 		Player player = (Player) (Object) this;
-		if (hasLibrarianEnchantment(player) || (hasForceOfMystic(player)&& FargosConfig.getConfigValue("librarian_enchantment"))) {
+		if (hasLibrarianEnchantment(player) || (hasForceOfMystic(player)&& FargosConfig.getConfigValue(player,"librarian_enchantment"))) {
 			int modifiedExperience = Math.round(p_36291_ * 1.5f);
             this.increaseScore(modifiedExperience);
             this.experienceProgress += (float)modifiedExperience / (float)this.getXpNeededForNextLevel();

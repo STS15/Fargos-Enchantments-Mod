@@ -1,5 +1,6 @@
 package dev.sts15.fargos.item.forces;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -66,7 +67,7 @@ public class ForceOfOverworld extends Item implements ICurioItem {
 	@Override
     public void onCraftedBy(ItemStack stack, Level level, Player player) {
         super.onCraftedBy(stack, level, player);
-        if (FargosConfig.getConfigValue("gold_enchantment")) {
+        if (FargosConfig.getConfigValue((ServerPlayer) player,"gold_enchantment")) {
         	CompoundTag nbt = stack.getOrCreateTag();
             nbt.putBoolean("minecraft:piglin_loved", true);
         }
@@ -85,7 +86,7 @@ public class ForceOfOverworld extends Item implements ICurioItem {
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         Player player = (Player) slotContext.entity();
         long currentTime = System.currentTimeMillis();
-        if (FargosConfig.getConfigValue("redstone_enchantment")) {
+        if (FargosConfig.getConfigValue((ServerPlayer) player,"redstone_enchantment")) {
         	repairArmorOverTime(player, currentTime);
         }
         Level level = player.level;

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "entries": [
+    "fargos:entity_drops/creeper_modifier",
+    "fargos:entity_drops/skeleton_modifier",
+    "fargos:entity_drops/zombie_modifier",
+    "fargos:entity_drops/spider_modifier"
+  ]
+}

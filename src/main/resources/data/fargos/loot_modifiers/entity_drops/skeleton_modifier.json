@@ -1,0 +1,13 @@
+{
+  "type": "fargos:append_loot",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:skeleton"
+      }
+    }
+  ],
+  "key": "fargos:entities/additional_skeleton_loot"
+}

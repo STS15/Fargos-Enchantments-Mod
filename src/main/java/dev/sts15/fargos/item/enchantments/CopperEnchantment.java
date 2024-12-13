@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 
 import com.mojang.math.Vector3f;
 import dev.sts15.fargos.Fargos;
+import dev.sts15.fargos.init.EffectsInit;
+
 import java.util.List;
 import java.util.Random;
 
@@ -103,7 +105,7 @@ public class CopperEnchantment extends Item implements ICurioItem {
                 }
             }
             
-            player.addEffect(new MobEffectInstance(Fargos.COOLDOWN_EFFECT.get(), 2 * 60 * 20, 0, false, false, true));
+            player.addEffect(new MobEffectInstance(EffectsInit.COOLDOWN_EFFECT.get(), 2 * 60 * 20, 0, false, false, true));
 
             lastAbilityActivationTime = currentTime;
             

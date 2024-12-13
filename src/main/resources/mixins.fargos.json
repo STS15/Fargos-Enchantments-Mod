@@ -2,7 +2,7 @@
   "required": true,
   "package": "dev.sts15.fargos.mixins",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["EndermanMixin","AnvilMixin","EnchantmentTableMixin","PiglinMixin","PiglinBruteMixin","LibrarianMixin","MobMixin","LivingEntityMixin","WitchMixin"],
+  "mixins": ["EndermanMixin","AnvilMixin","EnchantmentTableMixin","PiglinMixin","PiglinBruteMixin","LibrarianMixin","MobMixin","LivingEntityMixin","WitchMixin","PlayerEntityMixin","PlayerRendererMixin"],
   "minVersion": "0.8",
   "refmap": "mixins.fargos.refmap.json"
 }

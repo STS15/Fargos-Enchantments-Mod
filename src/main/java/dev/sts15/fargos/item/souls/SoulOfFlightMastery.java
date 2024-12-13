@@ -1,5 +1,6 @@
 package dev.sts15.fargos.item.souls;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -41,7 +42,7 @@ public class SoulOfFlightMastery extends Item implements ICurioItem {
     }
 
     @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
+    public void onEquip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         Entity entity = slotContext.entity();
         if (entity instanceof Player) {
             Player player = (Player) entity;
@@ -50,17 +51,9 @@ public class SoulOfFlightMastery extends Item implements ICurioItem {
     }
 
     private void enableFlight(Player player) {
-        if (!player.getAbilities().mayfly && FargosConfig.getConfigValue("soul_of_flight_mastery-flight")) {
+        if (!player.getAbilities().mayfly && hasSoulOfFlightMastery(player) && FargosConfig.getConfigValue(player,"soul_of_flight_mastery-flight")) {
             player.getAbilities().mayfly = true;
             player.getAbilities().setFlyingSpeed(0.05f);
-            player.onUpdateAbilities();
-        }
-    }
-
-    private void disableFlight(Player player) {
-        if (!player.isCreative() && !player.isSpectator()) {
-            player.getAbilities().mayfly = false;
-            player.getAbilities().flying = false;
             player.onUpdateAbilities();
         }
     }
@@ -74,13 +67,22 @@ public class SoulOfFlightMastery extends Item implements ICurioItem {
         }
     }
 
+    private void disableFlight(Player player) {
+        if (!player.isCreative() && !player.isSpectator()) {
+            player.getAbilities().mayfly = false;
+            player.getAbilities().flying = false;
+            player.onUpdateAbilities();
+        }
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("Provides Creative Flight").withStyle(ChatFormatting.GRAY));
     }
     
     @SuppressWarnings("deprecation")
-    private static boolean hasSoulOfFlightMastery(Player player) {
+	public
+    static boolean hasSoulOfFlightMastery(Player player) {
         return CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof SoulOfFlightMastery, player).isPresent();
     }
 }

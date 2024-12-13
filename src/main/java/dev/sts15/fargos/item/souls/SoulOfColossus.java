@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +19,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,12 +103,17 @@ public class SoulOfColossus extends Item implements ICurioItem {
     }
     
     private void removeNegativeEffects(Player player) {
+        List<MobEffect> effectsToRemove = new ArrayList<>();
         for (MobEffectInstance effect : player.getActiveEffects()) {
             if (!effect.getEffect().isBeneficial()) {
-                player.removeEffect(effect.getEffect());
+                effectsToRemove.add(effect.getEffect());
             }
         }
+        for (MobEffect effect : effectsToRemove) {
+            player.removeEffect(effect);
+        }
     }
+
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {

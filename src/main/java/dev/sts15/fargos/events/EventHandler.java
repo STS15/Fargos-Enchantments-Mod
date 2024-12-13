@@ -1,5 +1,6 @@
 package dev.sts15.fargos.events;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -23,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.sts15.fargos.Fargos;
 import dev.sts15.fargos.effect.EnchantmentUtils;
 import dev.sts15.fargos.entity.custom.*;
+import dev.sts15.fargos.init.EffectsInit;
 import dev.sts15.fargos.init.FargosConfig;
 import dev.sts15.fargos.init.ModEntities;
 import dev.sts15.fargos.item.enchantments.*;
@@ -141,7 +143,7 @@ public class EventHandler {
 	    long currentTime = player.level.getGameTime();
 	    if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.START) {
 
-	        if (hasArchitectEnchantment(player) || (hasForceOfExplorer(player) && FargosConfig.getConfigValue("architect_enchantment"))) {
+	        if (hasArchitectEnchantment(player) || (hasForceOfExplorer(player) && FargosConfig.getConfigValue(player, "architect_enchantment"))) {
 	        	 EnchantmentUtils.setPlayerReach(REACH_MODIFIER_ID, player, 59.0);
             } else {
                 EnchantmentUtils.removePlayerReach(REACH_MODIFIER_ID, player);
@@ -179,7 +181,7 @@ public class EventHandler {
 	        removeDroppedMarkedLapisNearPlayer(player);
 	    }
 	    
-	    if (hasGlowstoneEnchantment(player) || (hasForceOfExplorer(player) && FargosConfig.getConfigValue("glowstone_enchantment"))) {
+	    if (hasGlowstoneEnchantment(player) || (hasForceOfExplorer(player) && FargosConfig.getConfigValue(player,"glowstone_enchantment"))) {
 	    	Level world = player.level;
 	        BlockPos playerPos = player.blockPosition();
 	        BlockPos blockBelowPos = playerPos.below();
@@ -196,7 +198,7 @@ public class EventHandler {
 	        }
 	    }
 	    
-	    if ((hasThornyEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("thorny_enchantment")))) {
+	    if ((hasThornyEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"thorny_enchantment")))) {
 	        BlockPos belowPlayer = player.blockPosition().below();
 	        BlockState blockBelow = player.level.getBlockState(belowPlayer);
 	        if (blockBelow.getBlock() instanceof LeavesBlock) {
@@ -234,7 +236,7 @@ public class EventHandler {
 	    	removeDiamondArmorModifier(player);
         }
 	    
-	    if (hasBlazeEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue("blaze_enchantment"))) { // Add force here
+	    if (hasBlazeEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue(player,"blaze_enchantment"))) { // Add force here
             int radius = 4;
             AABB area = player.getBoundingBox().inflate(radius);
             List<Monster> mobs = player.level.getEntitiesOfClass(Monster.class, area);
@@ -256,7 +258,7 @@ public class EventHandler {
         }
 
 	    
-	    if (hasGhastEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue("ghast_enchantment"))) { // Add force here
+	    if (hasGhastEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue(player,"ghast_enchantment"))) { // Add force here
             boolean isCurrentlyWalking = player.isSprinting();
 
             if (isCurrentlyWalking && !wasWalking.getOrDefault(playerUUID, false)) {
@@ -265,7 +267,7 @@ public class EventHandler {
 
             wasWalking.put(playerUUID, isCurrentlyWalking);
         }
-	    if (hasZombieEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue("zombie_enchantment"))) {
+	    if (hasZombieEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue(player,"zombie_enchantment"))) {
             Long lastAttackTime = lastAttackTimes.getOrDefault(playerUUID, 0L);
             if (currentTime - lastAttackTime >= INCREASE_ATTACK_SPEED_THRESHOLD) {
                 increaseAttackSpeed(player, playerUUID);
@@ -273,7 +275,7 @@ public class EventHandler {
             	resetAttackSpeed(player, playerUUID);
             }
         }
-	    boolean hasEnchantment = hasIronGolemEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("iron_golem_enchantment"));
+	    boolean hasEnchantment = hasIronGolemEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"iron_golem_enchantment"));
         AttributeInstance healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (healthAttribute.getModifier(IRON_GOLEM_HEALTH_BOOST_ID) == null && hasEnchantment) {
             AttributeModifier healthBoostModifier = new AttributeModifier(IRON_GOLEM_HEALTH_BOOST_ID, "IronGolemHealthBoost", 20.0F, AttributeModifier.Operation.ADDITION);
@@ -300,7 +302,7 @@ public class EventHandler {
                 (source.isFire() && (hasFireEnchantment(player))) ||
                 (source.isFall() && (hasAirEnchantment(player))) ||
                 (source.isExplosion() && (hasObsidianEnchantment(player))) ||
-                (source.isMagic() && (hasDragonEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue("dragon_enchantment"))))
+                (source.isMagic() && (hasDragonEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue(player,"dragon_enchantment"))))
             ) {
                 if (player.isOnFire()) {
                 	player.setRemainingFireTicks(0);
@@ -315,7 +317,7 @@ public class EventHandler {
 		        UUID playerId = player.getUUID();
 		        long currentTime = player.level.getGameTime();
 		        lastAttackTimes.put(playerId, currentTime);
-		        if (hasZombieEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue("zombie_enchantment"))) {
+		        if (hasZombieEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue(player,"zombie_enchantment"))) {
 		            long lastAttackTime = lastAttackTimes.getOrDefault(playerId, 0L);
 		            if (currentTime - lastAttackTime > INCREASE_ATTACK_SPEED_THRESHOLD) {
 		            	increaseAttackSpeed(player, playerId);
@@ -336,7 +338,7 @@ public class EventHandler {
 	            (source.isFire() && (hasFireEnchantment(player))) ||
 	            (source.isFall() && (hasAirEnchantment(player))) ||
 	            (source.isExplosion() && (hasObsidianEnchantment(player))) ||
-	            (source.isMagic() && (hasDragonEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue("dragon_enchantment")))) // Add Force here
+	            (source.isMagic() && (hasDragonEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue(player,"dragon_enchantment")))) // Add Force here
 	            ) {
 	            event.setCanceled(true);
 	            event.getEntity().hurtTime = 0;
@@ -352,17 +354,17 @@ public class EventHandler {
 	            float increasedCritDamage = event.getAmount() * criticalMultiplier;
 	            event.setAmount(increasedCritDamage);
 	        }
-	        if (hasCreeperEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue("creeper_enchantment"))) {
+	        if (hasCreeperEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue(player,"creeper_enchantment"))) {
                 createExplosion(player);
             }
-            if (hasBattleEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("battle_enchantment"))) {
+            if (hasBattleEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"battle_enchantment"))) {
                 Integer invincibilityTicks = invinciblePlayers.get(player.getUUID());
                 if (invincibilityTicks == null || invincibilityTicks <= 0) {
                     invinciblePlayers.put(player.getUUID(), 5);
                     event.setCanceled(true);
                 }
             }
-            if (hasUndyingEnchantment(player) || (hasForceOfMystic(player) && FargosConfig.getConfigValue("undying_enchantment"))) {
+            if (hasUndyingEnchantment(player) || (hasForceOfMystic(player) && FargosConfig.getConfigValue(player,"undying_enchantment"))) {
             	if (player.getHealth() - event.getAmount() <= 0) {
                     long currentTime = player.level.getGameTime();
                     undyingCooldowns.putIfAbsent(player.getUUID(), 0L);
@@ -374,21 +376,21 @@ public class EventHandler {
                     }
                 }
             }
-            if ((hasVoidEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("void_enchantment"))) && Math.random() < 0.15) {
+            if ((hasVoidEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"void_enchantment"))) && Math.random() < 0.15) {
             	if (player.getHealth() - event.getAmount() <= 0) {
             		event.setCanceled(true);
             	}
             }
             
-            if ((hasCactusEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("cactus_enchantment"))) && event.getSource().getEntity() instanceof LivingEntity) {
+            if ((hasCactusEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"cactus_enchantment"))) && event.getSource().getEntity() instanceof LivingEntity) {
             	Entity attacker = event.getSource().getEntity();
                 float damageToReflect = event.getAmount() / 4;
                 attacker.hurt(DamageSource.GENERIC, damageToReflect);
             }
-            if ((hasWitchEnchantment(player) || (hasForceOfMystic(player) && FargosConfig.getConfigValue("witch_enchantment"))) && event.getSource().getEntity() instanceof LivingEntity attacker) {
+            if ((hasWitchEnchantment(player) || (hasForceOfMystic(player) && FargosConfig.getConfigValue(player,"witch_enchantment"))) && event.getSource().getEntity() instanceof LivingEntity attacker) {
                 attacker.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 0));
             }
-            if ((hasThornyEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("thorny_enchantment")))) {
+            if ((hasThornyEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"thorny_enchantment")))) {
                 if (event.getSource() == DamageSource.SWEET_BERRY_BUSH) {
                     event.setCanceled(true);
                 }
@@ -397,7 +399,7 @@ public class EventHandler {
 	    
 	    if (event.getSource().getDirectEntity() instanceof Arrow && event.getSource().getEntity() instanceof Player) {
 	        Player player = (Player) event.getSource().getEntity();
-	        if (hasSkeletonEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue("skeleton_enchantment"))) {
+	        if (hasSkeletonEnchantment(player) || (hasForceOfRejectors(player) && FargosConfig.getConfigValue(player,"skeleton_enchantment"))) {
 	            float newDamage = event.getAmount() * 1.5F;
 	            event.setAmount(newDamage);
 	        }
@@ -407,12 +409,12 @@ public class EventHandler {
 	        Player attacker = (Player) source.getEntity();
 	        if (entity instanceof Monster) {
 	            LivingEntity livingEntity = (LivingEntity) entity;
-	            if ((hasBlazeEnchantment(attacker) || (hasForceOfRejectors(attacker)&& FargosConfig.getConfigValue("blaze_enchantment")))
+	            if ((hasBlazeEnchantment(attacker) || (hasForceOfRejectors(attacker)&& FargosConfig.getConfigValue(attacker,"blaze_enchantment")))
 	            		&& livingEntity.isOnFire()) {
 	                float increasedDamage = event.getAmount() * 1.25f;
 	                event.setAmount(increasedDamage);
 	            }
-	            if ((hasVampiricEnchantment(attacker) || (hasForceOfMystic(attacker) && FargosConfig.getConfigValue("vampiric_enchantment")))) {
+	            if ((hasVampiricEnchantment(attacker) || (hasForceOfMystic(attacker) && FargosConfig.getConfigValue(attacker,"vampiric_enchantment")))) {
 	                float healAmount = event.getAmount() * 0.1f;
 	                attacker.heal(healAmount);
 	            }
@@ -426,6 +428,19 @@ public class EventHandler {
 	        checkAndApplyEmeraldEnchantment(attacker, event);
 	    }
 	}
+	
+	@SubscribeEvent
+    public void breakSpeedCheck(PlayerEvent.BreakSpeed event) {
+        Player player = event.getEntity();
+        if (hasSoulOfFlightMastery(player) && !player.isOnGround()) {
+            //LOGGER.info("Flying speed: " + event.getState());
+            float standardSpeed = player.getInventory().getDestroySpeed(event.getState());
+            event.setNewSpeed(standardSpeed);
+            return;
+        } else {
+            //LOGGER.info("Ground speed: " + event.getState());
+        }
+    }
 	
 	private static void resetAttackSpeed(Player player, UUID playerId) {
 	    AttributeInstance attackSpeedAttribute = player.getAttribute(Attributes.ATTACK_SPEED);
@@ -701,13 +716,13 @@ public class EventHandler {
     public static void onPlayerJump(LivingJumpEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (hasCreeperEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue("creeper_enchantment"))) { // Add Force here
+            if (hasCreeperEnchantment(player) || (hasForceOfRejectors(player)&& FargosConfig.getConfigValue(player,"creeper_enchantment"))) { // Add Force here
                 createExplosion(player);
             }
-            if (hasShulkerEnchantment(player) || (hasForceOfMystic(player) && FargosConfig.getConfigValue("shulker_enchantment"))) {
+            if (hasShulkerEnchantment(player) || (hasForceOfMystic(player) && FargosConfig.getConfigValue(player,"shulker_enchantment"))) {
             	if (!hasSoulOfFlightMastery(player)) {
             		if (!player.isCreative()) {
-                    	player.addEffect(new MobEffectInstance(Fargos.FLIGHT_EFFECT.get(), 400));
+                    	player.addEffect(new MobEffectInstance(EffectsInit.FLIGHT_EFFECT.get(), 400));
                     }
             	}
             }
@@ -717,7 +732,7 @@ public class EventHandler {
 
 	private static void applyVindicatorBoostIfEligible(Player attacker, LivingHurtEvent event) {
 	    UUID attackerId = attacker.getUUID();
-	    if ((hasVindicatorEnchantment(attacker) || (hasForceOfRejectors(attacker)) && FargosConfig.getConfigValue("vindicator_enchantment")) && isEligibleForVindicatorBoost(attackerId, attacker.level.getGameTime())) { // Add force here
+	    if ((hasVindicatorEnchantment(attacker) || (hasForceOfRejectors(attacker)) && FargosConfig.getConfigValue(attacker,"vindicator_enchantment")) && isEligibleForVindicatorBoost(attackerId, attacker.level.getGameTime())) { // Add force here
 	        float boostedDamage = event.getAmount() * 1.5F;
 	        event.setAmount(boostedDamage);
 	        canBoostAttack.put(attackerId, false);
@@ -824,7 +839,7 @@ public class EventHandler {
     private static void tryVoidTick(Level world, Player player) {
         int minY = world.dimensionType().minY();
         int maxY = world.dimensionType().logicalHeight();
-        if ((hasVoidEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue("void_enchantment"))) && player.getY() < (minY - 40)) {
+        if ((hasVoidEnchantment(player) || (hasForceOfWarrior(player) && FargosConfig.getConfigValue(player,"void_enchantment"))) && player.getY() < (minY - 40)) {
             player.teleportTo(player.getX(), maxY, player.getZ());
         }
     }
@@ -834,7 +849,7 @@ public class EventHandler {
     	
         @SuppressWarnings("deprecation")
 		boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof AmathystEnchantment, player).isPresent();
-        boolean hasForceConfig = FargosConfig.getConfigValue("amethyst_enchantment");
+        boolean hasForceConfig = FargosConfig.getConfigValue(player,"amethyst_enchantment");
         boolean hasForce = hasForceOfOverworld(player);
         
         return hasCurio || (hasForce && hasForceConfig);
@@ -842,7 +857,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasEmeraldEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof EmeraldEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("emerald_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"emerald_enchantment");
         boolean hasForce = hasForceOfOverworld(player);
 
         return hasCurio || (hasForce && hasConfig);
@@ -854,7 +869,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasDiamondEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof DiamondEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("diamond_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"diamond_enchantment");
         boolean hasForce = hasForceOfOverworld(player);
 
         return hasCurio || (hasForce && hasConfig);
@@ -862,7 +877,7 @@ public class EventHandler {
 //    @SuppressWarnings("deprecation")
 //    private static boolean hasRedstoneEnchantment(Player player) {
 //        boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof RedstoneEnchantment, player).isPresent();
-//        boolean hasConfig = FargosConfig.getConfigValue("redstone_enchantment");
+//        boolean hasConfig = FargosConfig.getConfigValue(player,"redstone_enchantment");
 //        boolean hasForce = hasForceOfOverworld(player);
 //
 //        return hasCurio || (hasForce && hasConfig);
@@ -870,7 +885,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasGoldEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof GoldEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("gold_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"gold_enchantment");
         boolean hasForce = hasForceOfOverworld(player);
 
         return hasCurio || (hasForce && hasConfig);
@@ -882,7 +897,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasLapisEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof LapisEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("lapis_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"lapis_enchantment");
         boolean hasForce = hasForceOfOverworld(player);
 
         return hasCurio || (hasForce && hasConfig);
@@ -892,7 +907,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasFireEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof FireEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("fire_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"fire_enchantment");
         boolean hasForce = hasForceOfNature(player);
 
         return hasCurio || (hasForce && hasConfig);
@@ -900,7 +915,7 @@ public class EventHandler {
 //    @SuppressWarnings("deprecation")
 //    private static boolean hasWaterEnchantment(Player player) {
 //        boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof WaterEnchantment, player).isPresent();
-//        boolean hasConfig = FargosConfig.getConfigValue("water_enchantment");
+//        boolean hasConfig = FargosConfig.getConfigValue(player,"water_enchantment");
 //        boolean hasForce = hasForceOfNature(player);
 //
 //        return hasCurio || (hasForce && hasConfig);
@@ -908,7 +923,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasAirEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof AirEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("air_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"air_enchantment");
         boolean hasForce = hasForceOfNature(player);
 
         return hasCurio || (hasForce && hasConfig);
@@ -916,7 +931,7 @@ public class EventHandler {
     @SuppressWarnings("deprecation")
     private static boolean hasEarthEnchantment(Player player) {
         boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof EarthEnchantment, player).isPresent();
-        boolean hasConfig = FargosConfig.getConfigValue("earth_enchantment");
+        boolean hasConfig = FargosConfig.getConfigValue(player,"earth_enchantment");
         boolean hasForce = hasForceOfNature(player);
 
         return hasCurio || (hasForce && hasConfig);

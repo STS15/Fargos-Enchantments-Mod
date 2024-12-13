@@ -1,0 +1,13 @@
+{
+  "type": "fargos:append_loot",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:zombie"
+      }
+    }
+  ],
+  "key": "fargos:entities/additional_zombie_loot"
+}

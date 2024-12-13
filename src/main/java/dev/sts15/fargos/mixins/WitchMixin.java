@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -84,7 +85,7 @@ public abstract class WitchMixin extends Entity {
     	
         @SuppressWarnings("deprecation")
 		boolean hasCurio = CuriosApi.getCuriosHelper().findEquippedCurio(itemStack -> itemStack.getItem() instanceof WitchEnchantment, player).isPresent();
-        boolean hasForceConfig = FargosConfig.getConfigValue("witch_enchantment");
+        boolean hasForceConfig = FargosConfig.getConfigValue(player,"witch_enchantment");
         boolean hasForce = hasForceOfMystic(player);
         
         return hasCurio || (hasForce && hasForceConfig);

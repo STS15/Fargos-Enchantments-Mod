@@ -1,5 +1,6 @@
 package dev.sts15.fargos.mixins;
 
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +19,7 @@ public abstract class EndermanMixin {
 
     @Inject(method = "isLookingAtMe", at = @At("HEAD"), cancellable = true)
     private void onShouldAttackPlayer(Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (player != null && (hasEndermanEnchantment(player) || (hasForceOfExplorer(player) && FargosConfig.getConfigValue("enderman_enchantment")))) {
+        if (player != null && (hasEndermanEnchantment(player) || (hasForceOfExplorer(player) && FargosConfig.getConfigValue(player,"enderman_enchantment")))) {
         	cir.setReturnValue(false);
         }
     }

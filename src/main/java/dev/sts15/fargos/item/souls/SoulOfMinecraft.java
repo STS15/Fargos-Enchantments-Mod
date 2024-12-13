@@ -1,5 +1,6 @@
 package dev.sts15.fargos.item.souls;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -82,7 +83,7 @@ public class SoulOfMinecraft extends Item implements ICurioItem {
 	}
 
 	private void provideInfiniteAir(Player player) {
-        if (player.isUnderWater() && FargosConfig.getConfigValue("water_enchantment")) {
+        if (player.isUnderWater() && FargosConfig.getConfigValue(player,"water_enchantment")) {
             player.setAirSupply(player.getMaxAirSupply());
         }
     }

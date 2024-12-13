@@ -2,6 +2,7 @@ package dev.sts15.fargos.init;
 
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.Tiers;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -14,10 +15,13 @@ import dev.sts15.fargos.item.forces.*;
 import dev.sts15.fargos.item.items.*;
 import dev.sts15.fargos.item.souls.*;
 import dev.sts15.fargos.item.weapons.*;
-import dev.sts15.fargos.sound.ModSounds;
 
 public class ItemInit {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Fargos.MODID);
+    
+    public static void register(IEventBus modEventBus) {
+        ITEMS.register(modEventBus);
+    }
 
 
     // Enchantments
@@ -245,6 +249,9 @@ public class ItemInit {
     
     public static final RegistryObject<SwordOfTheFates> SWORD_OF_THE_FATES = ITEMS.register("sword_of_the_fates",
             () -> new SwordOfTheFates(Tiers.NETHERITE, 0, 0, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+    
+//    public static final RegistryObject<TestSummoner> TEST_SUMMONER = ITEMS.register("test_summoner",
+//            () -> new TestSummoner(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
 
     
     // Music Discs

@@ -1,4 +1,4 @@
-package dev.sts15.fargos.JEI;
+package dev.sts15.fargos.jei;
 
 import dev.sts15.fargos.Fargos;
 import dev.sts15.fargos.init.BlockInit;

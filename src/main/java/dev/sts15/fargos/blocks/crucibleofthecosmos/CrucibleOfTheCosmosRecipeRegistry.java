@@ -3,8 +3,8 @@ package dev.sts15.fargos.blocks.crucibleofthecosmos;
 import com.google.common.collect.ImmutableList;
 
 import dev.sts15.fargos.Fargos;
-import dev.sts15.fargos.JEI.CrucibleOfTheCosmosRecipe;
 import dev.sts15.fargos.init.ItemInit;
+import dev.sts15.fargos.jei.CrucibleOfTheCosmosRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;

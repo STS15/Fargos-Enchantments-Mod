@@ -12,7 +12,7 @@
       }
     },
     {
-      "weight": 9,
+      "weight": 2,
       "element": {
         "location": "fargos:dungeon2/long_hallway",
         "processors": "minecraft:empty",
@@ -39,7 +39,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 4,
       "element": {
         "location": "fargos:dungeon2/center",
         "processors": "minecraft:empty",
@@ -57,7 +57,7 @@
       }
     },
     {
-      "weight": 10,
+      "weight": 13,
       "element": {
         "location": "fargos:dungeon2/roomtohall",
         "processors": "minecraft:empty",
@@ -66,7 +66,7 @@
       }
     },
  {
-      "weight": 4,
+      "weight": 3,
       "element": {
         "location": "fargos:dungeon2/room",
         "processors": "minecraft:empty",
@@ -246,7 +246,7 @@
       }
     },
   {
-      "weight": 10,
+      "weight": 12,
       "element": {
         "location": "fargos:dungeon2/chest",
         "processors": "minecraft:empty",
@@ -255,7 +255,7 @@
       }
     },
   {
-      "weight": 8,
+      "weight": 3,
       "element": {
         "location": "fargos:dungeon2/lowpile",
         "processors": "minecraft:empty",
@@ -264,7 +264,7 @@
       }
     },
   {
-      "weight": 5,
+      "weight": 2,
       "element": {
         "location": "fargos:dungeon2/highpile",
         "processors": "minecraft:empty",
@@ -273,7 +273,7 @@
       }
     },
   {
-      "weight": 15,
+      "weight": 7,
       "element": {
         "location": "fargos:dungeon2/zombie",
         "processors": "minecraft:empty",
@@ -282,7 +282,7 @@
       }
     },
   {
-      "weight": 15,
+      "weight": 7,
       "element": {
         "location": "fargos:dungeon2/skeleton",
         "processors": "minecraft:empty",
@@ -291,7 +291,7 @@
       }
     },
   {
-      "weight": 15,
+      "weight": 6,
       "element": {
         "location": "fargos:dungeon2/spider",
         "processors": "minecraft:empty",

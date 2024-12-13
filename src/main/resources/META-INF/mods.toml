@@ -3,7 +3,7 @@ loaderVersion="[43,)"
 license="All rights reserved"
 [[mods]]
 modId="fargos"
-version="1.7.0"
+version="1.8.0"
 displayName="Fargo's Mod"
 logoFile="icon.png"
 authors="STS15, ADRMLParangosky, and Sassidy"
@@ -31,6 +31,11 @@ Fargo's mod includes multiple unique enchantment curios and a couple interesting
     modId="curios"
     mandatory=true
     versionRange="[1.19.2-5.1.4.3,)"
+    
+[[dependencies.fargos]]
+    modId="lodestone"
+    mandatory=true
+    versionRange="[1.19.2-1.4.2,)"
 
 [[mixins]]
     refmap="fargos-refmap.json"

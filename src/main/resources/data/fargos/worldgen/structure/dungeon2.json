@@ -8,10 +8,10 @@
 "type": "minecraft:uniform",
 
     "max_inclusive": {
- "absolute": 40
+ "absolute": 16
 },
     "min_inclusive": {
- "absolute": -40
+ "absolute": -16
 }
   },
   "start_pool": "fargos:dungeon2start",
